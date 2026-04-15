@@ -16,7 +16,7 @@ except ImportError:  # pragma: no cover
     from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 
-from config.config import CHUNK_SIZE, CHUNK_OVERLAP, RETRIEVAL_K
+from config.config import CHUNK_SIZE, CHUNK_OVERLAP, RETRIEVAL_K, RELEVANCE_THRESHOLD
 from models.embeddings import EmbeddingFunction
 
 
@@ -178,14 +178,14 @@ def format_context(search_results: list[dict]) -> str:
     return "\n\n---\n\n".join(context_parts)
 
 
-def has_relevant_context(search_results: list[dict], threshold: float = 1.5) -> bool:
+def has_relevant_context(search_results: list[dict], threshold: float = None) -> bool:
     """
     Determine if the search results contain relevant context.
     Lower scores indicate better matches in FAISS.
 
     Args:
         search_results: List of search result dictionaries
-        threshold: Maximum score to consider relevant (lower is better)
+        threshold: Maximum score to consider relevant (default from config)
 
     Returns:
         True if results are relevant, False otherwise
@@ -193,6 +193,7 @@ def has_relevant_context(search_results: list[dict], threshold: float = 1.5) -> 
     if not search_results:
         return False
 
+    threshold = threshold or RELEVANCE_THRESHOLD
     # Check if at least one result has a good score
     best_score = min(result["score"] for result in search_results)
     return best_score < threshold

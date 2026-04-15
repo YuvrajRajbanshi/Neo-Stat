@@ -31,6 +31,7 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))
 RETRIEVAL_K = int(os.getenv("RETRIEVAL_K", "3"))
+RELEVANCE_THRESHOLD = float(os.getenv("RELEVANCE_THRESHOLD", "2.0"))
 
 # Web Search Configuration
 WEB_SEARCH_RESULTS = int(os.getenv("WEB_SEARCH_RESULTS", "3"))

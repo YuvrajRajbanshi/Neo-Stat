@@ -281,6 +281,70 @@ def inject_custom_styles():
                 }
             }
 
+            section[data-testid="stSidebar"] details {
+                background: #f5f7fb !important;
+            }
+
+            section[data-testid="stSidebar"] details [data-testid="stJson"] {
+                background: #2d333b !important;
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] details [data-testid="stJson"] * {
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] details pre {
+                background: #2d333b !important;
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] details code {
+                background: transparent !important;
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] [data-testid="stJson"] {
+                background: #2d333b !important;
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] [data-testid="stJson"] * {
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] pre {
+                background: #2d333b !important;
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] code {
+                background: transparent !important;
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] .cm-string {
+                color: #90ee90 !important;
+            }
+
+            section[data-testid="stSidebar"] .cm-property {
+                color: #87ceeb !important;
+            }
+
+            section[data-testid="stSidebar"] .cm-number {
+                color: #ffa500 !important;
+            }
+
+            section[data-testid="stSidebar"] .stJson {
+                background: #2d333b !important;
+                color: #ffffff !important;
+            }
+
+            section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] + [data-testid="stJson"] {
+                background: #2d333b !important;
+                color: #ffffff !important;
+            }
+
             @media (max-width: 768px) {
                 .main .block-container {
                     padding-top: 0.9rem;
@@ -395,8 +459,9 @@ def render_sidebar():
 
         # Show config summary
         with st.expander("View Config"):
+            import json
             config = get_config_summary()
-            st.json(config)
+            st.code(json.dumps(config, indent=2), language="json")
 
         st.divider()
 
@@ -425,27 +490,6 @@ def render_chat_history():
 
 def render_insights_panel(response_mode: str):
     """Render right-side insights and app state panel."""
-    with st.container(border=True):
-        st.markdown("### PDF Upload")
-        uploaded_file_main = st.file_uploader(
-            "Upload a PDF document",
-            type=["pdf"],
-            key="main_pdf_uploader",
-            help="Upload here if the sidebar is collapsed"
-        )
-        handle_uploaded_pdf(uploaded_file_main)
-
-        if st.session_state.pdf_processed:
-            st.caption(f"Active file: {st.session_state.get('current_file', 'Unknown')}")
-            st.caption(f"Chunks indexed: {st.session_state.chunk_count}")
-
-            if st.button("Clear Document", key="main_clear_document"):
-                st.session_state.vector_store = None
-                st.session_state.pdf_processed = False
-                st.session_state.chunk_count = 0
-                st.session_state.current_file = None
-                st.rerun()
-
     with st.container(border=True):
         st.markdown("### Workspace")
         st.markdown(f"**Mode:** {response_mode.capitalize()}")
